@@ -1,0 +1,130 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #A9D6E5;
+    margin: 0px;
+}
+
+.nav-bar {
+    background-color: #19747E;
+    width: 100%;
+    height: 8%;
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: space-around;
+    padding: 5px;
+    z-index: 99;
+}
+
+.nav-button {
+    border: 0px;
+    color: #E2E2E2;
+    background-color: #19747E;
+    width: 32%;
+}
+
+.nav-button:active {
+    background-color: #125259;
+}
+
+.divider {
+    background-color: #125259;
+    width: 2px;
+}
+
+.pop-up-menu-class {
+    display: None;
+    position: fixed;
+    background-color: rgba(
+        0,
+        0,
+        0,
+        0.4
+    );
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+}
+
+#upload-menu-container {
+    background-color: white;
+    position: absolute;
+    width: 450px;
+    border-radius: 20px;
+    margin-bottom: 25vh;
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    align-items: center;
+}
+
+#delete-menu-container {
+    background-color: white;
+    position: absolute;
+    width: 450px;
+    border-radius: 20px;
+    margin-bottom: 25vh;
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.show {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#image-feed {
+    background-color: #D1E8E2;
+    margin-top: 15vh;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    width: 450px;
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 10px;
+}
+
+#focus-image-container {
+    position: absolute;
+    margin-top: 15vh;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+#focussed-image {
+    max-width: 450px;
+    max-height: 700px;
+}
+
+.image-box {
+    max-width: 350px;
+}
+
+.highlight {
+    background-color: greenyellow;
+}
+
+.highlight > img {
+    opacity: 0.5;
+}
+
+.placeholder {
+    width: 200px;
+    height: 200px;
+    background-color: black;
+}

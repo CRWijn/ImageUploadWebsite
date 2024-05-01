@@ -1,0 +1,7 @@
+
+# Colours:
+soft mint green #D1E8E2
+deep teal #19747E
+deep teal darker #125259
+light sky blue #A9D6E5
+light gray #E2E2E2

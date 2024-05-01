@@ -1,0 +1,32 @@
+-->Homepage
+
+Filter option can be set to date added ascending or descending, or randomised.
+When no album is selected all images will be shown.
+If user is not logged in no images should be shown.
+Should redirect user to credentials page if they have not logged in already.
+
+-->Credentials Page
+
+The user has to enter their full name and the device mac address will be registered.
+Upon request, an email is sent to me and if it is accepted that device can see the images.
+
+-->Albums Page
+
+Simple menu showing all the available albums. The default album of ALL should always be there. 
+It should be possible to create and delete albums.
+Deleting an album should prompt if the deleting of the album will also delete all of the pictures tagged by the album.
+Album selected should be saved into a cookie.
+
+-->Upload Page
+
+Let the user upload an image and select an album to add it to.
+Should support several file uploads at once.
+
+-->Delete Page
+
+Simple delete action that should make sure the user wants to delete the image.
+
+-->View Image Page
+
+Enlarges (focusses on) a specific image.
+Button to add it to albums.

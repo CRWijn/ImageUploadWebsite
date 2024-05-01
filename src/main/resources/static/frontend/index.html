@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calvin's Image Sharing</title>
+
+    <link rel="stylesheet" href="index_style.css">
+
+    <script src="index.js"></script>
+</head>
+<body onscroll="onScroll()">
+    <div class="nav-bar">
+        <button class="nav-button" onclick="">Albums</button>
+        <div class="divider"></div>
+        <button class="nav-button" onclick="makeUploadMenuVisible()">Upload</button>
+        <div class="divider"></div>
+        <button class="nav-button" onclick="makeDeleteMenuVisible()" onmousedown="stopUnhighlight()">Delete</button>
+    </div>
+    <div id="upload-menu" class="pop-up-menu-class">
+        <div id="upload-menu-container">
+            <h2>Upload Images</h2>
+            <form id="uploadImages" method="post" enctype="multipart/form-data">
+                <input type="file" name="images[]" id="fileUploadInput" class="file-input" multiple required>
+                <button type="submit" id="submit-btn-upload-form">Upload</button>
+            </form>
+            <button onclick="makeUploadMenuInvisible()">Close</button>
+        </div>
+    </div>
+    <div id="delete-menu" class="pop-up-menu-class">
+        <div id="delete-menu-container">
+            <h2>Are You Sure?</h2>
+            <button onclick="deleteHighlighted()" onmousedown="stopUnhighlight()">Yes</button>
+            <button onclick="makeDeleteMenuInvisible()" onmousedown="stopUnhighlight()">No</button>
+        </div>
+    </div>
+    <div id="image-feed">
+    </div>
+    <div id="focus-image-head" class="pop-up-menu-class" onclick="unfocusImage()">
+        <div id="focus-image-container">
+        </div>
+    </div>
+</body>
+</html>
