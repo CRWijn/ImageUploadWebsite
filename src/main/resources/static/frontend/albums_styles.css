@@ -49,7 +49,7 @@ body {
     height: 100%;
 }
 
-#upload-menu-container {
+#create-menu-container {
     background-color: white;
     position: absolute;
     width: 450px;
@@ -77,9 +77,13 @@ body {
     align-items: center;
 }
 
+.show {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 
-
-#image-feed {
+#album-feed {
     background-color: #D1E8E2;
     margin-top: 15vh;
     position: absolute;
@@ -95,96 +99,18 @@ body {
     row-gap: 10px;
 }
 
-#focus-image-container {
-    position: absolute;
-    margin-top: 15vh;
-    left: 50%;
-    transform: translate(-50%);
-}
-
-#focussed-image {
-    max-width: 450px;
-    max-height: 700px;
-}
-
-.image-box {
-    max-width: 350px;
-}
-
-.add-to-album-container {
-    display: none;
-}
-
-#add-to-album {
-    position: fixed;
-    height: 100px;
-    width: 200px;
-    background-color: #125259;
-    border-radius: 10px;
-    bottom: 5px;
-    right: 5px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-#add-to-album > button {
-    background-color: yellowgreen;
-    border: 0px;
-    width: 180px;
-    height: 35px;
-    border-radius: 10px;
-}
-
-#add-to-album > button:active {
-    background-color: rgb(97, 129, 33);
-}
-
-#albums-container {
+.album-element {
+    height: 50px;
+    width: 375px;
     background-color: white;
-    position: absolute;
-    width: 450px;
     border-radius: 20px;
-    margin-top: 15vh;
-    left: 50%;
-    transform: translate(-50%);
-    display: flex;
-    padding: 10px;
-    flex-direction: column;
-    align-items: center;
-}
-
-#scrollable-album-container {
-    width: 350px;
-    height: 500px;
-    overflow-y: scroll;
-    margin-bottom: 10px;
-    background-color: lightgrey;
-    border-radius: 10px;
-}
-
-#scrollable-album-container > ul {
-    list-style: none;
-    color: black;
-    margin-left: 0px;
-    font-size: large;
-}
-
-#scrollable-album-container > ul > label {
-    margin-left: 5px;
+    padding-left: 30px;
 }
 
 .highlight {
-    background-color: greenyellow;
+    background-color: grey;
 }
 
 .highlight > img {
     opacity: 0.5;
-}
-
-.show {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 }

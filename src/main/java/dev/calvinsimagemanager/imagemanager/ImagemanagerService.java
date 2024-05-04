@@ -36,7 +36,7 @@ public class ImagemanagerService {
             newModel.setDateAdded(LocalDateTime.now());
             imgManagerRepository.save(newModel);
             for (String album : albums) {
-                addImageToAlbum(newModel.getUniqueId(), album);
+                System.out.println(addImageToAlbum(newModel.getUniqueId(), album));
             }
         }
         return "Image saved successfully!";
@@ -83,6 +83,18 @@ public class ImagemanagerService {
         return images;
     }
 
+    public List<ImageBytesModel> getNImagesFromAlbum(String albumName, int skip, int limit) {
+        List<ImagemanagerModel> imageModels = imgManagerRepository.getNImagesSortAlbum(albumName, skip, limit);
+        List<ImageBytesModel> images = new ArrayList<ImageBytesModel>();
+        for (ImagemanagerModel imageModel : imageModels) {
+            Optional<ImageBytesModel> imageDataOption = getImage(imageModel.getUniqueId());
+            if (imageDataOption.isPresent()) {
+                images.add(imageDataOption.get());
+            }
+        }
+        return images;
+    }
+
     public String deleteImage(String id) {
         Optional<ImagemanagerModel> imgModelOption = imgManagerRepository.findById(id);
         if (!imgModelOption.isPresent()) {
@@ -102,7 +114,9 @@ public class ImagemanagerService {
         return "Image deleted successfully";
     }
 
-    public String addAlbum(AlbumModel newAlbum) {
+    public String addAlbum(String newAlbumName) {
+        AlbumModel newAlbum = new AlbumModel();
+        newAlbum.setAlbumName(newAlbumName);
         if (albumRepo.existsById(newAlbum.getAlbumName())) {
             return "Album with that name already exists!";
         } else {

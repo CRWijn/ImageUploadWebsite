@@ -8,12 +8,21 @@ var mouseY = 0;
 var scrollMode = 0;
 var imageClicked = false;
 var imageInFocus = false;
+var disableFocus = false;
+var album;
 
 window.onload = function() {
     startUp();
 }
 
+function hideAllPopups() {
+    makeAlbumAddMenuInvisible();
+    makeDeleteMenuInvisible();
+    makeUploadMenuInvisible();
+}
+
 function startUp() {
+    getAlbum();
     let uploadForm = document.getElementById("uploadImages");
     uploadForm.addEventListener('submit', function(event) {
         const uploadFormInput = document.querySelector("#fileUploadInput");
@@ -25,6 +34,20 @@ function startUp() {
         }
     }, true);
     requestImages(1);
+}
+
+function getAlbum() {
+    var winUrl = new URL(window.location.href);
+    let inputParams = new URLSearchParams(winUrl.search);
+    if (inputParams.has('album')) {
+        album = inputParams.get('album');
+    } else {
+        album = ''
+    }
+}
+
+function navToAlbumPage() {
+    window.location.href = "./albums.html";
 }
 
 window.addEventListener('mousemove', function(event) {
@@ -82,16 +105,14 @@ window.addEventListener('mousedown', function() {
 });
 
 // Load in images
-function createBox () {
-    const imagesContainer = document.getElementById("image-feed");
-    var newImage = document.createElement('div');
-    newImage.className = "placeholder";
-    imagesContainer.appendChild(newImage);
-}
-
 function requestImages (number) {
     let req = new XMLHttpRequest();
-    const reqString = "http://localhost:8080/image/get-n-images/" + localStorage.getItem("imageIndex") + "/" + number;
+    var reqString = '';
+    if (album === '') {
+        reqString = "http://localhost:8080/image/get-n-images/" + localStorage.getItem("imageIndex") + "/" + number;
+    } else {
+        reqString = "http://localhost:8080/image/get-n-images-from-album/" + album + "/" + localStorage.getItem("imageIndex") + "/" + number;
+    }
     req.open("GET", reqString);
     req.send();
     req.onload = function() {
@@ -100,7 +121,7 @@ function requestImages (number) {
             addImage(response[index])
             localStorage.setItem("imageIndex", Number(localStorage.getItem("imageIndex"))+1)
         }
-        if (window.innerHeight === document.documentElement.scrollHeight) {
+        if (window.innerHeight === document.documentElement.scrollHeight && response.length !== 0) {
             requestImages(1);
         }
     }
@@ -114,26 +135,37 @@ function addImage (imageSrc) {
     newImage.className = "image-box";
     newImage.id = imageSrc.imageId;
     newImage.draggable = false;
+    // Handler for clicking on an image
     newImage.addEventListener('click', function(event) {
         pressImage(event, this.parentElement);
     });
+    // Handler for blocking the unhighlighting
     newImage.addEventListener('mousedown', function() {
         stopUnhighlight();
     });
+    // Handler for highlighting images when in mouse over highlight mode
     singleImageContainer.addEventListener('mouseover', function() {
         mouseOverHighlight(this);
     });
+    // Handler for starting the mouse over highlight mode
     singleImageContainer.addEventListener('mousedown', function() {
         mouseIsDown = true;
         var imageContainer = this;
         setTimeout(function() {
             if(mouseIsDown) {
+                disableFocus = true;
                 if (!imageContainer.classList.contains('highlight')) {
                     highlight(imageContainer, true);
                 }
                 shouldHighlight = true;
             }
         }, 350);
+    });
+    // Handler to not focus on image if press and hold done
+    singleImageContainer.addEventListener('mouseup', function() {
+        setTimeout(function() {
+            disableFocus = false;
+        }, 25)
     });
     singleImageContainer.appendChild(newImage);
     imagesContainer.appendChild(singleImageContainer);
@@ -150,6 +182,7 @@ function onScroll () {
 
 // Upload images
 function makeUploadMenuVisible () {
+    hideAllPopups();
     disableScrolling();
     let uploadMenuContainer = document.getElementById("upload-menu");
     uploadMenuContainer.classList.add("show");
@@ -220,6 +253,7 @@ function removeImageFromHtml(imageId) {
 }
 
 function makeDeleteMenuVisible () {
+    hideAllPopups();
     disableScrolling();
     let deleteMenuContainer = document.getElementById("delete-menu");
     deleteMenuContainer.classList.add("show");
@@ -293,6 +327,10 @@ function highlight(imageContainer, fromSingleClick) {
     highlightedImages.push(imageIndex);
     highlightedImages.sort();
     imageContainer.classList.add("highlight");
+    const albumMenu = document.getElementById("add-to-album").parentNode;
+    if (highlightedImages.length > 0 && !albumMenu.classList.contains("show")) {
+        makeAlbumMenuVisible();
+    }
 }
 
 function unhighlight(imageContainer, fromSingleClick) {
@@ -305,6 +343,10 @@ function unhighlight(imageContainer, fromSingleClick) {
     highlightedImages.splice(indexInList, 1);
     highlightedImages.sort();
     imageContainer.classList.remove("highlight");
+    const albumMenu = document.getElementById("add-to-album").parentNode;
+    if (highlightedImages.length < 1 && albumMenu.classList.contains("show")) {
+        makeAlbumMenuInvisible();
+    }
 }
 
 function stopUnhighlight() {
@@ -317,7 +359,7 @@ function pressImage(event, imageContainer) {
         handleImageCtrlPress(imageContainer);
     } else if (event.shiftKey){
         handleImageShiftPress(imageContainer);
-    } else {
+    } else if (!disableFocus) {
         focusImage(imageContainer)
     }
 }
@@ -345,4 +387,129 @@ function unfocusImage() {
     enableScrolling();
     focusImageHead.classList.remove("show");
     imageInFocus = false;
+}
+
+// Add to album menu
+function makeAlbumMenuVisible() {
+    let albumMenu = document.getElementById("add-to-album").parentNode;
+    albumMenu.classList.add("show");
+}
+
+function makeAlbumMenuInvisible() {
+    let albumMenu = document.getElementById("add-to-album").parentNode;
+    albumMenu.classList.remove("show");
+}
+
+function removeFromAlbum() {
+    if (album === '') {
+        alert("Not viewing an album!");
+        return;
+    }
+
+    let imageFeedChildren = document.getElementById("image-feed").children;
+    for (var x = 0; x < highlightedImages.length; x++) {
+        let imageId = imageFeedChildren[highlightedImages[x]].children[0].id
+        requestRemoveFromAlbum(imageId);
+    }
+    
+    location.reload();
+}
+
+function requestRemoveFromAlbum(imageId) {
+    let req = new XMLHttpRequest();
+    const reqString = "http://localhost:8080/image/update/remove-from-album/" + imageId + "/" + album;
+    req.open("PATCH", reqString);
+    req.send();
+    req.onload = function() {
+        console.log(req.response);
+    }
+}
+
+function makeAlbumAddMenuVisible() {
+    hideAllPopups();
+    if (highlightedImages.length > 0) {
+        makeAlbumMenuInvisible();
+    }
+    disableScrolling();
+    let albumMenu = document.getElementById("add-to-album-menu");
+    albumMenu.classList.add("show");
+    getAlbums();
+}
+
+function makeAlbumAddMenuInvisible() {
+    enableScrolling();
+    if (highlightedImages.length > 0) {
+        makeAlbumMenuVisible();
+    }
+    let albumMenu = document.getElementById("add-to-album-menu");
+    albumMenu.classList.remove("show");
+}
+
+function getAlbums() {
+    let req = new XMLHttpRequest();
+    const reqString = "http://localhost:8080/album/get-all"
+    req.open("GET", reqString);
+    req.send();
+    req.onload = function() {
+        const response = eval(req.response);
+        for (var index = 0; index < response.length; index++) {
+            addAlbum(response[index]["albumName"]);
+        }
+    }
+}
+
+function addAlbum(albumName) {
+    let albumsList = document.getElementById("album-list");
+    var newAlbum = document.createElement('li');
+    var newCheckbox = document.createElement('input');
+    var newLabel = document.createElement('label');
+    newCheckbox.type = "checkbox";
+    newCheckbox.id = albumName;
+    newLabel.htmlFor = albumName;
+    newLabel.innerHTML = albumName;
+    newAlbum.appendChild(newCheckbox);
+    albumsList.appendChild(newAlbum);
+    newAlbum.appendChild(newLabel);
+}
+
+var disableClose = false;
+
+function tryCloseAlbums() {
+    setTimeout(function() {
+        if (disableClose) {
+            disableClose = false;
+        } else {
+            makeAlbumAddMenuInvisible();
+        }
+    }, 25);
+}
+
+function stopFromClosing() {
+    disableClose = true;
+}
+
+function requestAddToAlbum() {
+    const albumList = document.getElementById("album-list");
+    for (var x = 0; x < albumList.children.length; x++) {
+        let boxInput = albumList.children[x].children[0];
+        if (boxInput.checked) {
+            sendAddToAlbumRequest(boxInput.id);
+        }
+    }
+    makeAlbumAddMenuInvisible();
+    unhighlightAll();
+}
+
+function sendAddToAlbumRequest(albumName) {
+    const imageFeedChildren = document.getElementById("image-feed").children;
+    for (var x = 0; x < highlightedImages.length; x++) {
+        let imageId = imageFeedChildren[highlightedImages[x]].children[0].id;
+        let req = new XMLHttpRequest();
+        const reqString = "http://localhost:8080/image/update/add-to-album/" + imageId + "/" + albumName;
+        req.open("PATCH", reqString);
+        req.send();
+        req.onload = function() {
+            console.log(req.response);
+        }
+    }
 }

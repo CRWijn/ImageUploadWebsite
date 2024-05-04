@@ -16,4 +16,13 @@ public interface ImagemanagerRepository extends MongoRepository<ImagemanagerMode
       })
     List<ImagemanagerModel> getNImages(int skip, int limit);
 
+    
+    @Aggregation(pipeline = {
+      "{ '$match' : { 'albumName' : ?0}}",
+      "{ '$sort' : { 'dateAdded' : 1 } }",
+      "{ '$skip' : ?1 }", 
+      "{ '$limit' : ?2 }"
+    })
+    List<ImagemanagerModel> getNImagesSortAlbum(String albumName, int skip, int limit);
+
 }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calvin's Image Sharing</title>
+
+    <link rel="stylesheet" href="albums_styles.css">
+
+    <script src="albums_script.js"></script>
+</head>
+<body>
+    <div class="nav-bar">
+        <button class="nav-button" onclick="navToHomePage()">Home</button>
+        <div class="divider"></div>
+        <button class="nav-button" onclick="makeCreateMenuVisible()">New Album</button>
+        <div class="divider"></div>
+        <button class="nav-button" onclick="makeDeleteMenuVisible()" onmousedown="stopUnhighlight()">Delete</button>
+    </div>
+    <div id="create-menu" class="pop-up-menu-class">
+        <div id="create-menu-container">
+            <h2>Create a new album</h2>
+            <form id="createAlbum">
+                <input type="text" name="albumName" id="albumCreationInput" class="album-input" required>
+                <button type="submit" id="submit-btn-create-form">Upload</button>
+            </form>
+            <button onclick="makeCreateMenuInvisible()">Close</button>
+        </div>
+    </div>
+    <div id="delete-menu" class="pop-up-menu-class">
+        <div id="delete-menu-container">
+            <h2>Are You Sure?</h2>
+            <button onclick="deleteHighlighted()" onmousedown="stopUnhighlight()">Yes</button>
+            <button onclick="makeDeleteMenuInvisible()" onmousedown="stopUnhighlight()">No</button>
+        </div>
+    </div>
+    <div id="album-feed">
+    </div>
+</body>
+</html>

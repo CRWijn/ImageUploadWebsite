@@ -11,7 +11,7 @@
 </head>
 <body onscroll="onScroll()">
     <div class="nav-bar">
-        <button class="nav-button" onclick="">Albums</button>
+        <button class="nav-button" onclick="navToAlbumPage()">Albums</button>
         <div class="divider"></div>
         <button class="nav-button" onclick="makeUploadMenuVisible()">Upload</button>
         <div class="divider"></div>
@@ -38,6 +38,28 @@
     </div>
     <div id="focus-image-head" class="pop-up-menu-class" onclick="unfocusImage()">
         <div id="focus-image-container">
+        </div>
+    </div>
+    <div class="add-to-album-container" onmousedown="stopUnhighlight()">
+        <div id="add-to-album">
+            <button onclick="makeAlbumAddMenuVisible()">
+                Add To Album
+            </button>
+            <button onclick="removeFromAlbum()">
+                Remove From Album
+            </button>
+        </div>
+    </div>
+    <div id="add-to-album-menu" class="pop-up-menu-class" onmousedown="stopUnhighlight()" onclick="tryCloseAlbums()">
+        <div id="albums-container" onclick="stopFromClosing()">
+            <h2>Select Albums To Add The Image To</h2>
+            <h3>Albums</h3>
+            <div id="scrollable-album-container">
+                <ul id="album-list">
+
+                </ul>
+            </div>
+            <button onclick="requestAddToAlbum()">Confirm</button>
         </div>
     </div>
 </body>

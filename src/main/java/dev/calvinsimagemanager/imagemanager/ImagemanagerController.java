@@ -49,6 +49,11 @@ public class ImagemanagerController {
         return new ResponseEntity<List<ImagemanagerModel>>(imagemanagerService.getImagesFromAlbum(albumName), HttpStatus.OK);
     }
 
+    @GetMapping("/image/get-n-images-from-album/{albumName}/{start}/{number}")
+    public ResponseEntity<List<ImageBytesModel>> getNImagesFromAlbum(@PathVariable String albumName, @PathVariable int start, @PathVariable int number) {
+        return new ResponseEntity<List<ImageBytesModel>>(imagemanagerService.getNImagesFromAlbum(albumName, start, number), HttpStatus.OK);
+    }
+
     @PatchMapping("/image/update/add-to-album/{id}/{albumName}")
     public ResponseEntity<String> addImageToAlbum(@PathVariable String id, @PathVariable String albumName) {
         return new ResponseEntity<String>(imagemanagerService.addImageToAlbum(id, albumName), HttpStatus.OK);
@@ -65,8 +70,8 @@ public class ImagemanagerController {
     }
 
     @PostMapping("album/post")
-    public ResponseEntity<String> addAlbum(@RequestBody AlbumModel albumModel) {
-        return new ResponseEntity<String>(imagemanagerService.addAlbum(albumModel), HttpStatus.OK);
+    public ResponseEntity<String> addAlbum(@RequestParam("albumName") String albumName) {
+        return new ResponseEntity<String>(imagemanagerService.addAlbum(albumName), HttpStatus.OK);
     }
 
     @GetMapping("album/get-all")
