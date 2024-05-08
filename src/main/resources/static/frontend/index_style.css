@@ -197,6 +197,64 @@ body {
     margin-left: 5px;
 }
 
+@media (min-width: 768px) {
+
+    #image-feed {
+        width: 650px;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .image-box {
+        max-width: 300px;
+        max-height: 275px;
+    }
+
+    #foc
+
+    #focussed-image {
+        max-width: 650px;
+        max-height: 800px;
+    }
+
+    #focus-image-container {
+        margin-top: 0vh;
+    }
+}
+
+@media (min-width: 1200px) {
+
+    .nav-bar {
+        justify-content: left;
+    }
+
+    .nav-button {
+        width: 15%;
+    }
+
+    #image-feed {
+        width: 1150px;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .image-box {
+        max-width: 300px;
+        max-height: 275px;
+    }
+
+    #foc
+
+    #focussed-image {
+        max-width: 900px;
+        max-height: 1000px;
+    }
+
+    #focus-image-container {
+        margin-top: 0vh;
+    }
+}
+
 .highlight {
     background-color: greenyellow;
 }

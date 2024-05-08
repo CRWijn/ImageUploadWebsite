@@ -20,8 +20,6 @@ public class LocalImageManager {
 
         Files.copy(imageFile.getInputStream(), imgPath, StandardCopyOption.REPLACE_EXISTING);
 
-        //Convert from heic to jpg and read out the new file name
-
         return uniqueFileName;
     }
 

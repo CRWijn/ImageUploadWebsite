@@ -35,11 +35,11 @@
             <button onclick="makeUploadMenuInvisible()">Close</button>
         </div>
     </div>
-    <div id="delete-menu" class="pop-up-menu-class">
+    <div id="delete-menu" class="pop-up-menu-class" onmousedown="stopUnhighlight()">
         <div id="delete-menu-container">
             <h2>Are You Sure?</h2>
-            <button onclick="deleteHighlighted()" onmousedown="stopUnhighlight()">Yes</button>
-            <button onclick="makeDeleteMenuInvisible()" onmousedown="stopUnhighlight()">No</button>
+            <button onclick="deleteHighlighted()">Yes</button>
+            <button onclick="makeDeleteMenuInvisible()">No</button>
         </div>
     </div>
     <div id="image-feed">
