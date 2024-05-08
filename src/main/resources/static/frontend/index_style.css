@@ -54,7 +54,6 @@ body {
     position: absolute;
     width: 450px;
     border-radius: 20px;
-    margin-bottom: 25vh;
     left: 50%;
     transform: translate(-50%);
     display: flex;
@@ -165,6 +164,29 @@ body {
 }
 
 #scrollable-album-container > ul {
+    list-style: none;
+    color: black;
+    margin-left: 0px;
+    font-size: large;
+}
+
+#albums-container-on-upload {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#scrollable-album-container-on-upload {
+    width: 350px;
+    height: 350px;
+    overflow-y: scroll;
+    margin-bottom: 10px;
+    background-color: lightgrey;
+    border-radius: 10px;
+}
+
+#scrollable-album-container-on-upload > ul {
     list-style: none;
     color: black;
     margin-left: 0px;

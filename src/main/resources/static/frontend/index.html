@@ -24,6 +24,14 @@
                 <input type="file" name="images[]" id="fileUploadInput" class="file-input" multiple required>
                 <button type="submit" id="submit-btn-upload-form">Upload</button>
             </form>
+            <div id="albums-container-on-upload" onclick="stopFromClosing()">
+                <h3>Select Albums To Add The Image To</h3>
+                <div id="scrollable-album-container-on-upload">
+                    <ul id="album-list-on-upload">
+    
+                    </ul>
+                </div>
+            </div>
             <button onclick="makeUploadMenuInvisible()">Close</button>
         </div>
     </div>

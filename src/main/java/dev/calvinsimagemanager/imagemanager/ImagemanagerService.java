@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ public class ImagemanagerService {
     public String postImage(MultipartFile[] imagesData, List<String> albums) {
         String imageDirectory = "D:/ServerImageDatabase";
         String newId;
+        List<String> addedImageIds = new ArrayList<String>();
         for (MultipartFile singleImageData : imagesData) {
             try {
                 newId = LocalImageManager.saveImage(imageDirectory, singleImageData);
@@ -33,15 +35,14 @@ public class ImagemanagerService {
             }
             ImagemanagerModel newModel = new ImagemanagerModel();
             newModel.setUniqueId(newId);
+            addedImageIds.add(newId);
             newModel.setAlbumName(new ArrayList<String>());
             newModel.setImageDirectory(imageDirectory);
             newModel.setImageName(newId);
             newModel.setDateAdded(LocalDateTime.now());
             imgManagerRepository.save(newModel);
-            for (String album : albums) {
-                System.out.println(addImageToAlbum(newModel.getUniqueId(), album));
-            }
         }
+        addImageToAlbum(addedImageIds, albums);
         return "Image saved successfully!";
     }
     
@@ -118,6 +119,9 @@ public class ImagemanagerService {
     }
 
     public String addAlbum(String newAlbumName) {
+        if (newAlbumName.equals("none")) {
+            return "Cannot name album none (reserved)";
+        }
         AlbumModel newAlbum = new AlbumModel();
         newAlbum.setAlbumName(newAlbumName);
         if (albumRepo.existsById(newAlbum.getAlbumName())) {
@@ -138,19 +142,23 @@ public class ImagemanagerService {
         return albumRepo.findAll();
     }
 
-    public String addImageToAlbum(String imageId, String albumName) {
-        Optional<ImagemanagerModel> imageOption = imgManagerRepository.findById(imageId);
-        Optional<AlbumModel> albumOption = albumRepo.findById(albumName);
-        if (!imageOption.isPresent()) {
-            return "Image cannot be found";
+    public String addImageToAlbum(List<String> imageIds, List<String> albumNames) {
+        for (String imageId: imageIds) {
+            Optional<ImagemanagerModel> imageOption = imgManagerRepository.findById(imageId);
+            if (!imageOption.isPresent()) {
+                continue;
+            }
+            ImagemanagerModel image = imageOption.get();
+            for (String albumName: albumNames) {
+                Optional<AlbumModel> albumOption = albumRepo.findById(albumName);
+                if (!albumOption.isPresent()) {
+                    continue;
+                }
+                image.addToAlbum(albumName);
+            }
+            imgManagerRepository.save(image);
         }
-        if (!albumOption.isPresent()) {
-            return "Album does not exist";
-        }
-        ImagemanagerModel image = imageOption.get();
-        image.addToAlbum(albumName);
-        imgManagerRepository.save(image);
-        return "Added image to " + albumName + " album";
+        return "Finished adding image(s) to album(s)";
     }
 
     public String removeImageFromAlbum(String imageId, String albumName) {

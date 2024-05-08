@@ -127,8 +127,8 @@ function addAlbum (albumName) {
     textContainer.innerHTML = albumName; 
     singleAlbumContainer.appendChild(textContainer);
     // Handler for clicking on an album
-    textContainer.addEventListener('click', function(event) {
-        pressAlbum(event, this.parentElement);
+    singleAlbumContainer.addEventListener('click', function(event) {
+        pressAlbum(event, this);
     });
     // Handler for blocking the unhighlighting
     textContainer.addEventListener('mousedown', function() {
