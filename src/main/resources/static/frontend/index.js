@@ -22,6 +22,7 @@ function hideAllPopups() {
 }
 
 function startUp() {
+    checkLogin();
     getAlbum();
     let uploadForm = document.getElementById("uploadImages");
     uploadForm.addEventListener('submit', function(event) {
@@ -35,6 +36,29 @@ function startUp() {
     }, true);
     requestImages(1);
 }
+
+function checkLogin() {
+    var cookies = document.cookie.split(";");
+    console.log(cookies);
+    for (var x = 0; x < cookies.length; x++) {
+        let cookie = cookies[x].split("=")
+        if (cookie[0].trim() == "passwordChecked") {
+            let filledInPassword = cookie[1].trim();
+            if (filledInPassword !== "true") {
+                location.href = './password.html';
+            } else {
+                return
+            }
+        }
+    }
+    location.href = './password.html';
+}
+
+function cookieExists(name) {
+    var cks = document.cookie.split(';');
+    for(i = 0; i < cks.length; i++)
+      if (cks[i].split('=')[0].trim() == name) return true;
+  }
 
 function getAlbum() {
     var winUrl = new URL(window.location.href);

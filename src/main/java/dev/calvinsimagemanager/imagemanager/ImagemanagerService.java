@@ -1,5 +1,8 @@
 package dev.calvinsimagemanager.imagemanager;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -166,5 +169,29 @@ public class ImagemanagerService {
 
     public List<ImagemanagerModel> getImagesFromAlbum(String name) {
         return imgManagerRepository.findByAlbumName(name);
+    }
+
+    public String checkPassword(String password) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("src/main/java/password.txt"));
+            try {
+                String actualPassword = br.readLine();
+                if (!password.equals(actualPassword)) {
+                    return "Incorrect Password";
+                } else {
+                    return "Correct Password";
+                }
+            } catch(IOException e) {
+                return "IOException when reading password file: " + e;
+            } finally {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    return "Could not close buffered reader: " + e;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            return "File not found: " + e;
+        }
     }
 }

@@ -14,6 +14,7 @@ window.onload = function() {
 }
 
 function startUp() {
+    checkLogin();
     let createForm = document.getElementById("createAlbum");
     createForm.addEventListener('submit', function(event) {
         const createFormInput = document.getElementById("albumCreationInput");
@@ -27,6 +28,23 @@ function startUp() {
         location.reload();
     }, true);
     displayAlbums();
+}
+
+function checkLogin() {
+    var cookies = document.cookie.split(";");
+    console.log(cookies);
+    for (var x = 0; x < cookies.length; x++) {
+        let cookie = cookies[x].split("=")
+        if (cookie[0].trim() == "passwordChecked") {
+            let filledInPassword = cookie[1].trim();
+            if (filledInPassword !== "true") {
+                location.href = './password.html';
+            } else {
+                return
+            }
+        }
+    }
+    location.href = './password.html';
 }
 
 function navToHomePage() {
